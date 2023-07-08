@@ -1,0 +1,8 @@
+v: 0
+micros:
+  - name: comixey
+    src: .
+    engine: nodejs16
+    run: "node index.js"
+    public_routes:
+    - "/*"
