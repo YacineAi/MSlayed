@@ -51,6 +51,21 @@ app.get("/manga/:id", (req, res) => {
     });
 });
 
+app.get("/details/:id", (req, res) => {
+  axios.get("https://mangaslayer.com/manga-app-api/get-published-manga-details-info", {
+      params: {
+        manga_id: req.params.id,
+        chapters: "no",
+      },
+      headers: headers,
+    })
+    .then((response) => {
+      res.json(JSON.parse(response.data.result));
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
 app.get("/chapter/:cid", (req, res) => {
   axios.get("https://mangaslayer.com/manga-app-api/get-published-manga-chapter-pages", {
       params: {
