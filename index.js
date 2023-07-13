@@ -55,7 +55,7 @@ app.get("/details/:id", (req, res) => {
   axios.get("https://mangaslayer.com/manga-app-api/get-published-manga-details-info", {
       params: {
         manga_id: req.params.id,
-        chapters: "no",
+        chapters: "No",
       },
       headers: headers,
     })
