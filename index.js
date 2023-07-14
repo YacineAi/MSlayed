@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const app = express();
+const sharp = require('sharp');
 const port = process.env.PORT || 3000;
 const headers = {
   accept: "application/json",
@@ -81,6 +82,41 @@ app.get("/chapter/:cid", (req, res) => {
     .catch((error) => {
       console.error(error);
     });
+});
+
+app.get('/cover/fit', async (req, res) => {
+  try {
+    const imageUrl = req.query.imageUrl;
+    const width = 909;
+    const height = 476;
+    const blur = 6;
+    const response = await axios.get(imageUrl, {
+      responseType: 'arraybuffer',
+    });
+    const inputBuffer = Buffer.from(response.data, 'binary');
+    const blurredBuffer = await sharp(inputBuffer)
+      .resize(width, height)
+      .modulate({ brightness: 0.3 })
+      .blur(blur)
+      .toBuffer();
+
+    const resizedBuffer = await sharp(inputBuffer)
+      .resize({
+        fit: sharp.fit.contain,
+        height: height
+    })
+      .toBuffer();
+
+    const outputBuffer = await sharp(blurredBuffer)
+      .composite([{ input: resizedBuffer, gravity: 'center' }])
+      .toBuffer();
+
+    res.set('Content-Type', 'image/jpeg');
+    res.send(outputBuffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while processing the image.');
+  }
 });
 
 app.listen(port, () => {
