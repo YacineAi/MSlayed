@@ -17,13 +17,13 @@ const headers = {
 app.get("/", (req, res) => {
   res.sendStatus(200);
 });
-
 app.get("/search/:q", (req, res) => {
   axios.get("https://mangaslayer.com/manga-app-api/get-all-published-manga", {
       params: {
         list_type: "filter",
-        limit: 10,
-        json: `{"manga_name":"${req.params.q}","sort_by_direction":"DESC","sort_by":"manga_id","manga_status":"All","genre_include_ids":""}`,
+        limit: 30,
+        
+        json: `{"manga_name":"${req.params.q}","sort_by_direction":"ASC","sort_by":"manga_id","manga_status":"All","genre_include_ids":""}`,
       },
       headers: headers,
     })
