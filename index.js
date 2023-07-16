@@ -3,6 +3,7 @@ const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const app = express();
 const sharp = require('sharp');
+sharp.cache(false);
 const port = process.env.PORT || 3000;
 const headers = {
   accept: "application/json",
@@ -115,7 +116,7 @@ app.get('/cover/fit', async (req, res) => {
     res.send(outputBuffer);
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred while processing the image.');
+    res.status(500).send('An error occurred while processing the image : ', error);
   }
 });
 
