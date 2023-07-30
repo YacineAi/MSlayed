@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 const sharp = require('sharp');
 sharp.cache(false);
-const port = process.env.PORT || 3000;
 const headers = {
   accept: "application/json",
   "accept-encoding": "gzip",
@@ -120,6 +119,64 @@ app.get('/cover/fit', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`app listening on port ${port}`);
+/* -----< MLIK >----- */ 
+app.get("/mello/search/:q", (req, res) => {
+axios.get(`https://api.mangamello.com/v1/mangas/search?title=${req.params.q}&genres=0&lang=ar&per_page=21&page=1`, {
+  headers: {
+    'Accept': 'application/json',
+  },
+})
+  .then(response => {
+    res.json(response.data.data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+
+app.get("/mello/manga/:id", (req, res) => {
+axios.get(`https://api.mangamello.com/v1/mangas/${req.params.id}?relations=chapters,genres&rate=true`, {
+  headers: {
+    'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+    'Accept': 'application/json',
+  },
+})
+  .then(response => {
+    res.json(response.data.data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+
+app.get("/mello/chapter/:cid/:mid", (req, res) => {
+  axios.get(`https://api.mangamello.com/v1/mangas/${req.params.mid}/chapters/${req.params.cid}?relations=chapterImages`, {
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+  .then(response => {
+    res.json(response.data.data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+
+app.get("/mello/hot", (req, res) => {
+  axios.get("https://api.mangamello.com/v1/mangas?dir=desc&sort_by=views", {
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+  .then(response => {
+    res.json(response.data.data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+});
+
+app.listen(3000, () => {
+  console.log(`app listening on port 3000`);
 });
