@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 const sharp = require('sharp');
 sharp.cache(false);
+const ejs = require('ejs');
 const headers = {
   accept: "application/json",
   "accept-encoding": "gzip",
@@ -14,10 +15,23 @@ const headers = {
   host: "mangaslayer.com",
   "user-agent": "okhttp/3.12.1",
 };
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
-app.get("/", (req, res) => {
-  res.sendStatus(200);
+
+function formatBytes(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) return '0 Byte';
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+app.get('/', (req, res) => {
+  const memoryUsage = process.memoryUsage();
+  const uptimeInSeconds = process.uptime().toFixed(2);
+  res.render('index', { memoryUsage, uptimeInSeconds, formatBytes });
 });
+
 app.get("/search/:q", (req, res) => {
   axios.get("https://mangaslayer.com/manga-app-api/get-all-published-manga", {
       params: {
@@ -90,14 +104,12 @@ app.get('/cover/fit', async (req, res) => {
     const width = 909;
     const height = 476;
     const blur = 6;
-
-    // Fetch the image
+    
     const response = await axios.get(imageUrl, {
       responseType: 'arraybuffer',
     });
-    const inputBuffer = Buffer.from(response.data, 'binary');
 
-    // Process the image
+    const inputBuffer = Buffer.from(response.data, 'binary');
     const blurredBuffer = await sharp(inputBuffer)
       .resize(width, height)
       .modulate({ brightness: 0.3 })
@@ -111,21 +123,12 @@ app.get('/cover/fit', async (req, res) => {
       })
       .toBuffer();
 
-    // Composite the images
     const outputBuffer = await sharp(blurredBuffer)
       .composite([{ input: resizedBuffer, gravity: 'center' }])
       .toBuffer();
 
-    // Set the response content type and send the image
     res.set('Content-Type', 'image/jpeg');
     res.send(outputBuffer);
-
-    // Clean up buffers to free memory
-    response.data = null; // Release the Axios response data buffer
-    inputBuffer = null;   // Release the input buffer
-    blurredBuffer = null; // Release the blurred buffer
-    resizedBuffer = null; // Release the resized buffer
-    outputBuffer = null;  // Release the output buffer
 
   } catch (error) {
     console.error(error);
