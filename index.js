@@ -90,10 +90,14 @@ app.get('/cover/fit', async (req, res) => {
     const width = 909;
     const height = 476;
     const blur = 6;
+
+    // Fetch the image
     const response = await axios.get(imageUrl, {
       responseType: 'arraybuffer',
     });
     const inputBuffer = Buffer.from(response.data, 'binary');
+
+    // Process the image
     const blurredBuffer = await sharp(inputBuffer)
       .resize(width, height)
       .modulate({ brightness: 0.3 })
@@ -104,20 +108,31 @@ app.get('/cover/fit', async (req, res) => {
       .resize({
         fit: sharp.fit.contain,
         height: height
-    })
+      })
       .toBuffer();
 
+    // Composite the images
     const outputBuffer = await sharp(blurredBuffer)
       .composite([{ input: resizedBuffer, gravity: 'center' }])
       .toBuffer();
 
+    // Set the response content type and send the image
     res.set('Content-Type', 'image/jpeg');
     res.send(outputBuffer);
+
+    // Clean up buffers to free memory
+    response.data = null; // Release the Axios response data buffer
+    inputBuffer = null;   // Release the input buffer
+    blurredBuffer = null; // Release the blurred buffer
+    resizedBuffer = null; // Release the resized buffer
+    outputBuffer = null;  // Release the output buffer
+
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred while processing the image : ', error);
+    res.status(500).send('An error occurred while processing the image: ' + error);
   }
 });
+
 
 /* -----< MLIK >----- */ 
 app.get("/mello/search/:q", (req, res) => {
