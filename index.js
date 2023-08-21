@@ -52,7 +52,7 @@ app.get("/search/:q", async (req, res) => {
 
     res.json(JSON.parse(response.data.result));
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching manga data.");
   }
 });
@@ -72,7 +72,7 @@ app.get("/manga/:id", async (req, res) => {
 
     res.json(JSON.parse(response.data.result));
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching manga details.");
   }
 });
@@ -92,7 +92,7 @@ app.get("/details/:id", async (req, res) => {
 
     res.json(JSON.parse(response.data.result));
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching manga details.");
   }
 });
@@ -113,7 +113,7 @@ app.get("/chapter/:cid", async (req, res) => {
 
     res.json(JSON.parse(response.data.result));
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching chapter pages.");
   }
 });
@@ -149,7 +149,7 @@ app.get("/cover/fit", async (req, res) => {
     res.set("Content-Type", "image/jpeg");
     res.send(outputBuffer);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while processing the image.");
   }
 });
@@ -168,7 +168,7 @@ app.get("/mello/search/:q", async (req, res) => {
 
     res.json(response.data.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching manga data.");
   }
 });
@@ -187,7 +187,7 @@ app.get("/mello/manga/:id", async (req, res) => {
 
     res.json(response.data.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching manga details.");
   }
 });
@@ -205,7 +205,7 @@ app.get("/mello/chapter/:cid/:mid", async (req, res) => {
 
     res.json(response.data.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching chapter details.");
   }
 });
@@ -223,7 +223,7 @@ app.get("/mello/hot", async (req, res) => {
 
     res.json(response.data.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.status);
     res.status(500).send("An error occurred while fetching hot manga data.");
   }
 });
