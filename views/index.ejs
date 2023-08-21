@@ -46,37 +46,49 @@
   <title>Server Stats</title>
 </head>
 <body>
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>🧠 Memory Metric</th>
-          <th>💾 Size</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>RSS</td>
-          <td><%= formatBytes(memoryUsage.rss) %></td>
-        </tr>
-        <tr>
-          <td>Heap Total</td>
-          <td><%= formatBytes(memoryUsage.heapTotal) %></td>
-        </tr>
-        <tr>
-          <td>Heap Used</td>
-          <td><%= formatBytes(memoryUsage.heapUsed) %></td>
-        </tr>
-        <tr>
-          <td>External</td>
-          <td><%= formatBytes(memoryUsage.external) %></td>
-        </tr>
-        <tr>
-          <td>Server Uptime</td>
-          <td><%= uptimeInSeconds %> seconds</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="table-container">
+<table>
+  <thead>
+    <tr>
+      <th>🧠 Memory Metric</th>
+      <th>💾 Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RSS</td>
+      <td><%= formatBytes(memoryUsage.rss) %></td>
+    </tr>
+    <tr>
+      <td>Heap Total</td>
+      <td><%= formatBytes(memoryUsage.heapTotal) %></td>
+    </tr>
+    <tr>
+      <td>Heap Used</td>
+      <td><%= formatBytes(memoryUsage.heapUsed) %></td>
+    </tr>
+    <tr>
+      <td>External</td>
+      <td><%= formatBytes(memoryUsage.external) %></td>
+    </tr>
+    <tr>
+      <td>Server Uptime</td>
+      <td><%= uptimeString %></td>
+    </tr>
+    <tr>
+      <td>Total RAM</td>
+      <td><%= osInfo.totalMemoryMB %> MB</td>
+    </tr>
+    <tr>
+      <td>Available RAM</td>
+      <td><%= osInfo.freeMemoryMB %> MB</td>
+    </tr>
+    <tr>
+      <td>Total CPUs</td>
+      <td><%= osInfo.cpus.length %></td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </body>
 </html>

@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 const sharp = require("sharp");
 const ejs = require("ejs");
-
+const os = require('os');
 sharp.cache(false);
 
 const headers = {
@@ -32,9 +32,30 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   const memoryUsage = process.memoryUsage();
-  const uptimeInSeconds = process.uptime().toFixed(2);
-  res.render("index", { memoryUsage, uptimeInSeconds, formatBytes });
+  let uptimeInSeconds = process.uptime();
+
+  let uptimeString = "";
+  if (uptimeInSeconds < 60) {
+    uptimeString = `${uptimeInSeconds.toFixed()} seconds`;
+  } else if (uptimeInSeconds < 3600) {
+    uptimeString = `${(uptimeInSeconds / 60).toFixed()} minutes`;
+  } else if (uptimeInSeconds < 86400) {
+    uptimeString = `${(uptimeInSeconds / 3600).toFixed()} hours`;
+  } else {
+    uptimeString = `${(uptimeInSeconds / 86400).toFixed()} days`;
+  }
+
+  const osInfo = {
+    totalMemoryMB: (os.totalmem() / (1024 * 1024)).toFixed(2),
+    freeMemoryMB: (os.freemem() / (1024 * 1024)).toFixed(2),
+    cpus: os.cpus(),
+  };
+
+  res.render("index", { memoryUsage, uptimeString, formatBytes, osInfo });
 });
+
+
+
 
 app.get("/search/:q", async (req, res) => {
   try {
