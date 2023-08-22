@@ -8,14 +8,9 @@ const os = require('os');
 sharp.cache(false);
 
 const headers = {
-  accept: "application/json",
-  "accept-encoding": "gzip",
-  "client-id": "manga-android-app2",
-  "client-secret": "9befba1243cc14c90e2f1d6da2c5cf9b252bfcbh",
-  connection: "Keep-Alive",
-  enc: "No",
-  host: "mangaslayer.com",
-  "user-agent": "okhttp/3.12.1",
+  'accept': 'application/json',
+  'enc': 'No',
+  'user-agent': 'okhttp/3.12.1'
 };
 
 function formatBytes(bytes) {
