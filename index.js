@@ -10,6 +10,7 @@ sharp.cache(false);
 const headers = {
   'accept': 'application/json',
   'enc': 'No',
+  'Cache-Control': 'no-cache',
   'user-agent': 'okhttp/3.12.1'
 };
 
@@ -72,8 +73,7 @@ app.get("/search/:q", async (req, res) => {
 
 app.get("/manga/:id", async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://mangaslayer.com/manga-app-api/get-published-manga-details-info",
+    const response = await axios.get("https://mangaslayer.com/manga-app-api/get-published-manga-details-info",
       {
         params: {
           manga_id: req.params.id,
@@ -92,8 +92,7 @@ app.get("/manga/:id", async (req, res) => {
 
 app.get("/details/:id", async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://mangaslayer.com/manga-app-api/get-published-manga-details-info",
+    const response = await axios.get("https://mangaslayer.com/manga-app-api/get-published-manga-details-info",
       {
         params: {
           manga_id: req.params.id,
@@ -112,8 +111,7 @@ app.get("/details/:id", async (req, res) => {
 
 app.get("/chapter/:cid", async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://mangaslayer.com/manga-app-api/get-published-manga-chapter-pages",
+    const response = await axios.get("https://mangaslayer.com/manga-app-api/get-published-manga-chapter-pages",
       {
         params: {
           manga_id: 1234,
