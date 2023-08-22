@@ -24,7 +24,6 @@ app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 
-
 app.get("/", (req, res) => {
   const memoryUsage = process.memoryUsage();
   let uptimeInSeconds = process.uptime();
@@ -51,11 +50,9 @@ app.get("/", (req, res) => {
 
 
 
-
 app.get("/search/:q", async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://mangaslayer.com/manga-app-api/get-all-published-manga",
+    const response = await axios.get("https://mangaslayer.com/manga-app-api/get-all-published-manga",
       {
         params: {
           list_type: "filter",
@@ -171,10 +168,10 @@ app.get("/cover/fit", async (req, res) => {
 });
 
 /* -----< MLIK >----- */
+/*
 app.get("/mello/search/:q", async (req, res) => {
   try {
-    const response = await axios.get(
-      `https://api.mangamello.com/v1/mangas/search?title=${req.params.q}&genres=0&lang=ar&per_page=21&page=1`,
+    const response = await axios.get(`https://api.mangamello.com/v1/mangas/search?title=${req.params.q}&genres=0&lang=ar&per_page=21&page=1`,
       {
         headers: {
           Accept: "application/json",
@@ -243,7 +240,7 @@ app.get("/mello/hot", async (req, res) => {
     res.status(500).send("An error occurred while fetching hot manga data.");
   }
 });
-
+*/
 app.listen(3000, () => {
   console.log("App listening on port 3000");
 });
